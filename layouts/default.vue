@@ -5,16 +5,12 @@
       fixed
       app
     >
-    
-    
       <v-toolbar-title v-text="title" />     <v-btn @click=" exportTableToExcel('data', filename = 'tongza')"    text
       color="primary"
     >
       Export data
     </v-btn>
-   
       <v-spacer />
- 
     </v-app-bar>
     <v-main>
       <v-container>

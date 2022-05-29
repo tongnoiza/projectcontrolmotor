@@ -1,9 +1,5 @@
 <template>
 <div>
-
-
-
-  
   <v-data-table
   id="data"
     :headers="headers"
@@ -17,6 +13,7 @@
   export default {
    async fetch(){
 this.datata = await this.$axios.$get('https://tongza.000webhostapp.com/')
+this.datata.reverse()
 console.log('fet api php ',this.datata)
     },
     data () {
@@ -25,6 +22,9 @@ console.log('fet api php ',this.datata)
           { text: 'ลำดับ', value: 'a' },
           { text: 'เครื่องที่', value: 'n' },
             { text: 'สถานะ', value: 'p' },
+             { text: 'ลำดับ', value: '0' },
+          { text: 'เครื่องที่', value: '1' },
+            { text: 'สถานะ', value: '2' },
         ],
       }
     },
