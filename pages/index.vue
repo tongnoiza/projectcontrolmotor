@@ -1,0 +1,35 @@
+<template>
+<div>
+
+
+
+  
+  <v-data-table
+  id="data"
+    :headers="headers"
+    :items="datata"
+    :items-per-page="5"
+    class="elevation-1"
+  ></v-data-table>
+  </div>
+</template>
+<script>
+  export default {
+   async fetch(){
+this.datata = await this.$axios.$get('https://tongza.000webhostapp.com/')
+console.log('fet api php ',this.datata)
+    },
+    data () {
+      return {datata:[],
+        headers: [
+          { text: 'ลำดับ', value: 'a' },
+          { text: 'เครื่องที่', value: 'n' },
+            { text: 'สถานะ', value: 'p' },
+        ],
+      }
+    },
+    methods: {
+    
+    },
+  }
+</script>
