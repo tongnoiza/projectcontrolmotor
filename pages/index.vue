@@ -14,7 +14,7 @@
    async fetch(){
 this.datata = await this.$axios.$get('https://tongza.000webhostapp.com/')
 this.datata.reverse()
-// console.log('fet api php ',this.datata)
+ console.log('fet api php ',this.datata)
     },
     data () {
       return {datata:[],
