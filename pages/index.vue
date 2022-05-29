@@ -19,9 +19,9 @@ this.datata.reverse()
     data () {
       return {datata:[],
         headers: [
-          { text: 'สถานะ', value: 'a' },
-          { text: 'วัน/เวลา', value: 'n' },
-            { text: 'เครื่องที่', value: 'p' },
+          { text: 'สถานะ', value: 'time' },
+          { text: 'วัน/เวลา', value: 'engin' },
+            { text: 'เครื่องที่', value: 'status' },
          
         ],
       }
