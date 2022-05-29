@@ -6,19 +6,13 @@
       app
     >
     
-         <v-btn @click=" exportTableToExcel('data', filename = 'tongza')"    text
+    
+      <v-toolbar-title v-text="title" />     <v-btn @click=" exportTableToExcel('data', filename = 'tongza')"    text
       color="primary"
     >
       Export data
     </v-btn>
-      <v-btn
-        icon
-        @click.stop="clipped = !clipped"
-      >
- 
-      </v-btn>
-    
-      <v-toolbar-title v-text="title" />
+   
       <v-spacer />
  
     </v-app-bar>
