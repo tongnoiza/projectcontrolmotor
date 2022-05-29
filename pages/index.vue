@@ -18,10 +18,10 @@ this.datata.reverse()
     },
     data () {
       return {datata:[],
-        headers: [
+        headers: [    { text: 'เครื่องที่', value: 'engin' },
           { text: 'สถานะ', value: 'status' },
           { text: 'วัน/เวลา', value: 'time' },
-            { text: 'เครื่องที่', value: 'engin' },
+        
          
         ],
       }
