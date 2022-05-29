@@ -7,7 +7,7 @@
     loading-text="กำลังโหลดข้อมูล..."
     :headers="headers"
     :items="datata"
-    :items-per-page="5"
+    :items-per-page="10"
     class="elevation-1"
   ></v-data-table>
   </div>

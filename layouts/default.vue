@@ -5,7 +5,7 @@
       fixed
       app
     >
-      <v-toolbar-title v-text="title" />     <v-btn @click=" exportTableToExcel('data', filename = 'tongza')"    text
+      <v-toolbar-title v-text="title" /> &nbsp; &nbsp;   &nbsp;      <v-btn @click=" exportTableToExcel('data', filename = 'tongza')"    text
       color="primary"
     >
       Export data
