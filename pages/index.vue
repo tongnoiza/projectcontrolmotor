@@ -14,17 +14,15 @@
    async fetch(){
 this.datata = await this.$axios.$get('https://tongza.000webhostapp.com/')
 this.datata.reverse()
-console.log('fet api php ',this.datata)
+// console.log('fet api php ',this.datata)
     },
     data () {
       return {datata:[],
         headers: [
-          { text: 'ลำดับ', value: 'a' },
-          { text: 'เครื่องที่', value: 'n' },
-            { text: 'สถานะ', value: 'p' },
-             { text: 'ลำดับ', value: '0' },
-          { text: 'เครื่องที่', value: '1' },
-            { text: 'สถานะ', value: '2' },
+          { text: 'สถานะ', value: 'a' },
+          { text: 'วัน/เวลา', value: 'n' },
+            { text: 'เครื่องที่', value: 'p' },
+         
         ],
       }
     },
