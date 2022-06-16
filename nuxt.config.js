@@ -6,10 +6,10 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - test-table',
-    title: 'test-table',
+    titleTemplate: '',
+    title: 'ECT ระบบควบคุมมอเตอร์เหนี่ยวนำ',
     htmlAttrs: {
-      lang: 'en'
+      lang: 'th'
     },
     meta: [
       { charset: 'utf-8' },
