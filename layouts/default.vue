@@ -1,5 +1,5 @@
 <template>
-  <v-app dark>
+  <v-app :light="true">
     <v-app-bar
       :clipped-left="clipped"
       fixed
@@ -12,23 +12,23 @@
     </v-btn>
       <v-spacer />
     </v-app-bar>
-    <v-main>
-      <v-container>
-        <Nuxt />
-      </v-container>
-    </v-main>
+    <v-main>  
+      <v-container><Nuxt /></v-container>
 
+    </v-main>
     <v-footer
       :absolute="!fixed"
       app
     >
-      <span>&copy; {{ new Date().getFullYear() }}</span>
+      <span>&copy; {{ new Date().getFullYear() }} Development By sontaya</span>
     </v-footer>
   </v-app>
 </template>
 
 <script>
+import PopupVue from '../components/popup.vue'
 export default {
+   components: { PopupVue },
   name: 'DefaultLayout',
   data () {
     return {
