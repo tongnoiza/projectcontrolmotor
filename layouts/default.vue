@@ -13,7 +13,7 @@
       <v-btn @click="cleartable()"    text
       color="primary"
     >
-      Export data
+ Clear Table
     </v-btn>
       <v-spacer />
     </v-app-bar>
