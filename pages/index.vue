@@ -3,13 +3,12 @@
     <v-data-table
  :dense="true"
       id="data"
-      disable-sort
       :loading="load"
       loading-text="กำลังโหลดข้อมูล..."
       :headers="headers"
-      :items="datata"
+      :items="data"
       color="green"
-      :items-per-page="5"
+      :items-per-page="10"
       class="elevation-1"
     ></v-data-table>
   </div>
@@ -17,10 +16,9 @@
 <script>
 export default {
   async fetch() {
-    this.datata = await this.$axios.$get("https://tongza.000webhostapp.com/");
-    this.datata.reverse();
+    this.data = await this.$axios.$get("https://tongza.000webhostapp.com/");
+    this.data.reverse();
     this.load = false;
-    console.log("fet api php ", this.datata);
   },
   data() {
     return {
@@ -33,7 +31,7 @@ export default {
         { n: "mukdahan", d: "l" },
       ],
       e1: 1,
-      datata: [],
+      data: [],
       load: true,
       headers: [
         { text: "เครื่องที่", value: "engin" },

@@ -5,7 +5,12 @@
       fixed
       app
     >
-      <v-toolbar-title v-text="title" /> &nbsp; &nbsp;   &nbsp;      <v-btn @click=" exportTableToExcel('data', filename = 'tongza')"    text
+      <v-toolbar-title v-text="title" /> &nbsp; &nbsp;   &nbsp;      <v-btn @click=" exportTableToExcel('data', filename = 'Motor Log')"    text
+      color="primary"
+    >
+      Export data
+    </v-btn> &nbsp; &nbsp;   &nbsp;  
+      <v-btn @click="cleartable()"    text
       color="primary"
     >
       Export data
@@ -53,6 +58,11 @@ export default {
       title: 'ระบบควบคุมมอเตอร์เหนี่ยวนำ'
     }
   },methods: {
+    cleartable(){
+      this.$axios.$get('https://tongza.000webhostapp.com/v.php').then(res=>{
+        console.log('respons '+res)
+      })
+    },
        exportTableToExcel(tableID, filename = ''){
     var downloadLink;
     var dataType = 'application/vnd.ms-excel';
