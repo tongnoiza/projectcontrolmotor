@@ -25,22 +25,22 @@
             </v-btn>
           </template>
           <v-card>
-            <v-card-title class="text-h5"> ยืนยันการลบข้อมูล </v-card-title>
-            <v-card-text>ต้องการลบข้อมูลหรือไม่</v-card-text>
+            <v-card-title class="text-h5"> ยืนยันการล้างข้อมูล </v-card-title>
+            <v-card-text>ต้องการล้างข้อมูลหรือไม่ ?</v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="green darken-1" text @click="dialog = false">
-                Disagree
+           ยกเลิก
               </v-btn>
               <v-btn color="green darken-1" text @click="cleartable()">
-                Agree
+                ยืนยัน
               </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
       </v-row>
 
-      <v-btn> Clear Table </v-btn>
+ 
       <v-spacer />
     </v-app-bar>
     <v-main>
@@ -91,7 +91,7 @@ export default {
           if (res == 1) {
             this.$nuxt.$emit("delete", "delete successfully");
           }
-        });
+        })
    this.dialog = false;
     },
 
