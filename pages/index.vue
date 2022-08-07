@@ -15,21 +15,17 @@
 </template>
 <script>
 export default {
+  created(){
+     this.$nuxt.$on('delete',(even) => this.s(even))
+  },
   async fetch() {
     this.data = await this.$axios.$get("https://tongza.000webhostapp.com/");
     this.data.reverse();
     this.load = false;
+  
   },
   data() {
     return {
-      t: "",
-      msg: [
-        { n: "sisaket", d: "l" },
-        { n: "ubon", d: "r" },
-        { n: "krungthep", d: "l" },
-        { n: "korach", d: "l" },
-        { n: "mukdahan", d: "l" },
-      ],
       e1: 1,
       data: [],
       load: true,
@@ -45,6 +41,16 @@ export default {
       default: { isDark: false },
     },
   },
-  methods: {},
+  activated(){
+    this.s()
+  },
+  methods: {
+  async  s(even){
+ this.data = await this.$axios.$get("https://tongza.000webhostapp.com/");
+    this.data.reverse();
+    this.load = false;
+    console.log('even ',even)
+    }
+  },
 };
 </script>
