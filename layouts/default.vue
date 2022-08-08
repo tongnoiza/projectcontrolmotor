@@ -3,11 +3,12 @@
     <v-app-bar :clipped-left="clipped" fixed app>
       <v-toolbar-title v-text="title" /> &nbsp; &nbsp; &nbsp;
       <v-btn
+      elevation="20"
         @click="exportTableToExcel('data', (filename = 'Motor Log'))"
         text
         color="primary"
       >
-        Export data
+       ดาวน์โหลด
       </v-btn>
       &nbsp; &nbsp; &nbsp;
 
@@ -15,13 +16,13 @@
         <v-dialog v-model="dialog" persistent max-width="290">
           <template v-slot:activator="{ on, attrs }">
             <v-btn
-              color="primary"
+              color="error"
               dark
               text
               v-bind="attrs"
-              
+              elevation="20"
               v-on="on"
-              >Clear Table
+              >ล้างข้อมูล
             </v-btn>
           </template>
           <v-card>
@@ -32,7 +33,7 @@
               <v-btn color="green darken-1" text @click="dialog = false">
            ยกเลิก
               </v-btn>
-              <v-btn color="green darken-1" text @click="cleartable()">
+              <v-btn color="error" :loading="loading" text @click="cleartable()">
                 ยืนยัน
               </v-btn>
             </v-card-actions>
@@ -64,6 +65,7 @@ export default {
       clipped: false,
       drawer: false,
       fixed: false,
+      loading:false,
       items: [
         {
           icon: "mdi-apps",
@@ -84,7 +86,7 @@ export default {
   },
   methods: {
     async cleartable() {
-    
+      this.loading=true;
            await this.$axios
         .$get("https://tongza.000webhostapp.com/v.php")
         .then((res) => {
@@ -92,6 +94,7 @@ export default {
             this.$nuxt.$emit("delete", "delete successfully");
           }
         })
+   this.loading=false;
    this.dialog = false;
     },
 
