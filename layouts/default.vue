@@ -8,8 +8,8 @@
         @click="exportTableToExcel('data', (filename = 'Motor Log'))"
         text
         color="primary"
-      ><span class="mdi mdi-45px mdi-content-save-plus-outline"></span>  
-       ดาวน์โหลด
+      >  
+    <div style="color:azure;"><span class="mdi mdi-45px mdi-content-save-plus-outline"></span> ดาวน์โหลด</div>  
      
       </v-btn>
       &nbsp; &nbsp; &nbsp;
@@ -25,7 +25,8 @@
               v-bind="attrs"
               elevation="20"
               v-on="on"
-              ><span class="mdi mdi-archive-remove-outline"></span> ล้างข้อมูล
+              > <div style="color:azure;">     <span class="mdi mdi-archive-remove-outline"></span> ล้างข้อมูล</div>
+         
             </v-btn>
           </template>
           <v-card>

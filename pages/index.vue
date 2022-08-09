@@ -1,11 +1,22 @@
 <template>
-  <div>
-        <v-chip
+  <div><b-row>    <v-chip
         color="green"
         dark
       >
-    เครื่องที่ 1 สีเขียว
+    1 
       </v-chip>
+          <v-chip
+        color="orange"
+        dark
+      >
+    2
+      </v-chip>  <v-chip
+        color="red"
+        dark
+      >
+   3 
+      </v-chip></b-row>
+ 
     <v-data-table
     id="data"
       :loading="load"
