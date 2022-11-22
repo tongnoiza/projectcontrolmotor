@@ -1,5 +1,5 @@
 <template>
-  <div><b-row>    <v-chip
+  <div>   <v-chip
         color="green"
         dark
       >
@@ -15,7 +15,7 @@
         dark
       >
    3 
-      </v-chip></b-row>
+      </v-chip>
  
     <v-data-table
     id="data"
@@ -27,21 +27,32 @@
       class="elevation-1"
     >
      <template v-slot:[`item.status`]="{ item }">
-      <v-chip
+      <div v-if="item.status!='ขัดข้อง'">
+        {{ item.status }}
+      </div>
+      <v-chip v-else
         :color="getColor(item.status)"
-        dark
+     
       >
         {{ item.status }}
          
       </v-chip>
     </template>
-     <template v-slot:[`item.engin`]="{ item }">
+     <!-- <template v-slot:[`item.engin`]="{ item }">
       <v-chip
         :color="getColorengine(item.engin)"
         dark
       >
     
            {{ item.engin }}
+      </v-chip>
+    </template> -->
+       <template v-slot:[`item.time`]="{ item }">
+      <v-chip
+        color="black"
+        dark
+      >
+           {{ item.time }}
       </v-chip>
     </template>
     </v-data-table>
@@ -50,7 +61,7 @@
 <script>
 export default {
   created() {
-    this.$nuxt.$on("delete", (even) => this.s(even));
+    this.$nuxt.$on("delete", (even) => this.pulldata(even));
   },
   async fetch() {
     this.data = await this.$axios.$get("https://tongza.000webhostapp.com/");
@@ -78,18 +89,19 @@ export default {
     },
   },
   activated() {
-    this.s();
+    this.pulldata();
   },
   methods: {
-    getColorengine(engin){
-      if(engin=='เครื่องที่ 1')return "blue"
-
-    },
+    // getColorengine(engin){
+    //   if(engin=='เครื่องที่ 1')return "blue"
+    //    else if(engin=='เครื่องที่ 2')return "orange"
+    //    else if(engin=='เครื่องที่ 3')return "#eb4034"
+    //           else if(engin=='เครื่องที่ 4')return "#d1944d"
+    // },
     getColor(status) {
-      if (status == "เปิด") return "green";
-      else if (status == "ปิด") return "red";
+    if (status == "ขัดข้อง") return "red";
     },
-    async s() {
+    async pulldata() {
       this.data = await this.$axios.$get("https://tongza.000webhostapp.com/");
       if (this.data.length == 0) this.delbut = false;
       this.$nuxt.$emit("datalen", this.delbut);

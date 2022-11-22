@@ -3,14 +3,16 @@
     <v-app-bar :clipped-left="clipped" fixed app>
       <v-toolbar-title v-text="title" /> &nbsp; &nbsp; &nbsp;
       <v-btn
-      v-show="exportbutton"
-      elevation="20"
+        v-show="exportbutton"
+        elevation="20"
         @click="exportTableToExcel('data', (filename = 'Motor Log'))"
         text
         color="primary"
-      >  
-    <div style="color:azure;"><span class="mdi mdi-45px mdi-content-save-plus-outline"></span> ดาวน์โหลด</div>  
-     
+      >
+        <div style="color: azure">
+          <span class="mdi mdi-45px mdi-content-save-plus-outline"></span>
+          ดาวน์โหลด
+        </div>
       </v-btn>
       &nbsp; &nbsp; &nbsp;
 
@@ -18,15 +20,17 @@
         <v-dialog v-model="dialog" persistent max-width="290">
           <template v-slot:activator="{ on, attrs }">
             <v-btn
-            v-show="delbutton"
+              v-show="delbutton"
               color="error"
               dark
               text
               v-bind="attrs"
               elevation="20"
               v-on="on"
-              > <div style="color:azure;">     <span class="mdi mdi-archive-remove-outline"></span> ล้างข้อมูล</div>
-         
+            >
+              <div style="color: azure">
+                <span class="mdi mdi-archive-remove-outline"></span> ล้างข้อมูล
+              </div>
             </v-btn>
           </template>
           <v-card>
@@ -35,11 +39,16 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="green darken-1" text @click="dialog = false">
-              <span class="mdi mdi-close-thick"></span> 
-           ยกเลิก
+                <span class="mdi mdi-close-thick"></span>
+                ยกเลิก
               </v-btn>
-              <v-btn color="error" :loading="loading" text @click="cleartable()">
-              <span class="mdi mdi-check-bold"></span> 
+              <v-btn
+                color="error"
+                :loading="loading"
+                text
+                @click="cleartable()"
+              >
+                <span class="mdi mdi-check-bold"></span>
                 ยืนยัน
               </v-btn>
             </v-card-actions>
@@ -50,10 +59,12 @@
       <v-spacer />
     </v-app-bar>
     <v-main>
-      <v-container><Nuxt  /></v-container>
+      <v-container><Nuxt /></v-container>
     </v-main>
     <v-footer :absolute="!fixed" app>
-      <span>&copy; {{ new Date().getFullYear() }} Development By B.sontaya</span>
+      <span
+        >&copy; {{ new Date().getFullYear() }} Development By B.sontaya</span
+      >
     </v-footer>
   </v-app>
 </template>
@@ -63,19 +74,26 @@ import PopupVue from "../components/popup.vue";
 export default {
   components: { PopupVue },
   name: "DefaultLayout",
-    created() {
+  created() {
     this.$nuxt.$on("datalen", (even) => this.delbut(even));
+  },
+  async fetch() {
+    let data = await this.$axios.post("http://localhost:443/gg", {
+      name: "tonguuza",
+    });
+
+    console.log("data ", data);
   },
   data() {
     return {
-      exportbutton:false,
-      delbutton:false,
+      exportbutton: false,
+      delbutton: false,
       del: true,
       dialog: false,
       clipped: false,
       drawer: false,
       fixed: false,
-      loading:false,
+      loading: false,
       items: [
         {
           icon: "mdi-apps",
@@ -95,22 +113,22 @@ export default {
     };
   },
   methods: {
-    delbut(val){
-      console.log('val ',val)
-this.delbutton =val
-this.exportbutton=val
+    delbut(val) {
+      console.log("val ", val);
+      this.delbutton = val;
+      this.exportbutton = val;
     },
     async cleartable() {
-      this.loading=true;
-           await this.$axios
+      this.loading = true;
+      await this.$axios
         .$get("https://tongza.000webhostapp.com/v.php")
         .then((res) => {
           if (res == 1) {
             this.$nuxt.$emit("delete", "delete successfully");
           }
-        })
-   this.loading=false;
-   this.dialog = false;
+        });
+      this.loading = false;
+      this.dialog = false;
     },
 
     exportTableToExcel(tableID, filename = "") {
