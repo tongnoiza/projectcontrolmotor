@@ -55,7 +55,6 @@
           </v-card>
         </v-dialog>
       </v-row>
-
       <v-spacer />
     </v-app-bar>
     <v-main>
@@ -76,13 +75,6 @@ export default {
   name: "DefaultLayout",
   created() {
     this.$nuxt.$on("datalen", (even) => this.delbut(even));
-  },
-  async fetch() {
-    let data = await this.$axios.post("http://localhost:443/gg", {
-      name: "tonguuza",
-    });
-
-    console.log("data ", data);
   },
   data() {
     return {
@@ -121,8 +113,9 @@ export default {
     async cleartable() {
       this.loading = true;
       await this.$axios
-        .$get("https://tongza.000webhostapp.com/v.php")
+        .$get("https://sontaya.000webhostapp.com/del.php")
         .then((res) => {
+          console.log(res)
           if (res == 1) {
             this.$nuxt.$emit("delete", "delete successfully");
           }
