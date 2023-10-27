@@ -3,9 +3,8 @@
     <v-app-bar :clipped-left="clipped" fixed app>
       <v-toolbar-title v-text="title" /> &nbsp; &nbsp; &nbsp;
       <v-btn
-        v-show="exportbutton"
         elevation="20"
-        @click="exportTableToExcel('data', (filename = 'Motor Log'))"
+        @click="exportTableToExcel()"
         text
         color="primary"
       >
@@ -15,12 +14,10 @@
         </div>
       </v-btn>
       &nbsp; &nbsp; &nbsp;
-
       <v-row>
         <v-dialog v-model="dialog" persistent max-width="290">
           <template v-slot:activator="{ on, attrs }">
             <v-btn
-              v-show="delbutton"
               color="error"
               dark
               text
@@ -62,22 +59,36 @@
     </v-main>
     <v-footer :absolute="!fixed" app>
       <span
-        >&copy; {{ new Date().getFullYear() }} Development By B.sontaya</span
+        >&copy; {{ new Date().getFullYear() }} Development By B.Sontaya</span
       >
     </v-footer>
   </v-app>
 </template>
 
 <script>
-import PopupVue from "../components/popup.vue";
+import * as XLSX from 'xlsx';
 export default {
-  components: { PopupVue },
-  name: "DefaultLayout",
-  created() {
-    this.$nuxt.$on("datalen", (even) => this.delbut(even));
+  head:{
+    title:'โปรเจคจบ',
+    meta: [
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Home page description'
+      }
+    ],
   },
+  // components: { PopupVue },
+  name: "DefaultLayout",
+ async created() {
+    // this.$nuxt.$on("datalen", (even) => this.delbut(even));
+  },
+
+
   data() {
     return {
+      data:[],
+      dataarray:[],
       exportbutton: false,
       delbutton: false,
       del: true,
@@ -104,9 +115,9 @@ export default {
       title: "ระบบควบคุมมอเตอร์เหนี่ยวนำ",
     };
   },
+
   methods: {
     delbut(val) {
-      console.log("val ", val);
       this.delbutton = val;
       this.exportbutton = val;
     },
@@ -124,29 +135,30 @@ export default {
       this.dialog = false;
     },
 
-    exportTableToExcel(tableID, filename = "") {
-      var downloadLink;
-      var dataType = "application/vnd.ms-excel";
-      var tableSelect = document.getElementById(tableID);
-      var tableHTML = tableSelect.outerHTML.replace(/ /g, "%20");
-      // Specify file name
-      filename = filename ? filename + ".xls" : "excel_data.xls";
-      // Create download link element
-      downloadLink = document.createElement("a");
-      document.body.appendChild(downloadLink);
-      if (navigator.msSaveOrOpenBlob) {
-        var blob = new Blob(["\ufeff", tableHTML], {
-          type: dataType,
-        });
-        navigator.msSaveOrOpenBlob(blob, filename);
-      } else {
-        // Create a link to the file
-        downloadLink.href = "data:" + dataType + ", " + tableHTML;
-        // Setting the file name
-        downloadLink.download = filename;
-        //triggering the function
-        downloadLink.click();
-      }
+   async exportTableToExcel() {
+      let sourc = []
+      sourc = await this.$axios.$get(
+          "https://sontaya.000webhostapp.com/getlog.php"
+        );
+console.log('sourc ', sourc );
+      //  let data = []
+      //  data =  sourc.forEach(x=> {
+      //   delete x["0"]
+      //   delete x["1"]
+      //   })
+  
+  let binaryWS = XLSX.utils.json_to_sheet(sourc); 
+  
+  // Create a new Workbook
+  var wb = XLSX.utils.book_new() 
+
+  // Name your sheet
+  XLSX.utils.book_append_sheet(wb, binaryWS, 'History Log') 
+
+  // export your excel
+  XLSX.writeFile(wb, 'HistoryLog.xlsx');
+
+
     },
   },
 };
