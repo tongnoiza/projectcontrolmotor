@@ -2,94 +2,35 @@
   <div>
     <v-row style="margin-top: 50px;margin-bottom: 100px;" >
       <v-card
-      v-for="(i,ii) in arr"
+      v-for="(i,n) in arr"
       style="margin:15px;width:150px;hight:150px"
-      title="This is a title"
-      subtitle="This is a subtitle"
-      text="This is content"
-    >
+      :title="`Slave ${+n+1}`"
+    > <v-row>
+   <v-col offset="1"> <v-chip class="ma-2" style="top: 6px;background-color: rgba(33,150,243,0.2) !important;" color="primary" variant="text">Slave {{ +n+1 }}</v-chip></v-col>
+    </v-row> 
     <v-img src="nano.png" ></v-img> 
           <v-row style="margin-top: -33px">
             <v-col offset="1">
-              <v-sheet class="pa-2 ma-2">  อัพเดตล่าสุด{{ i?.lastupdate }}</v-sheet>
+              <v-sheet v-show="i?.lastupdate" class="pa-2 ma-2">  อัพเดตล่าสุด{{ i?.lastupdate }}</v-sheet>
             </v-col>
           </v-row>
         <v-row >
           <v-col>     
         <div v-if="i?.status == 'on'" class="green-light"  ></div>
-         <div v-else  class="red"></div>
+         <div v-else-if="i?.status == 'off'"  class="red"></div>
+         <div v-else></div>
           </v-col>
         </v-row>
   </v-card>
-  
- 
-      <!-- <v-col v-for="(i,ii) in arr" cols="1" > 
-    <v-img src="nano.png" ></v-img>  
-          <v-row>
-            <v-col></v-col>
-            <v-col><label >อัพเดตล่าสุด{{ i?.lastupdate }}</label></v-col>
-            <v-col></v-col>
-
-          </v-row>
-        <v-row >
-          <v-col>     
-        <div v-if="i?.status == 'off'" class="red" ></div>
-         <div v-if="i?.status == 'on'" class="green-light" ></div>
-          </v-col>
-        </v-row>
-      </v-col> -->
     </v-row>
-
-    <!-- <v-row>
-      <v-col></v-col>
-      <v-col cols="8">
-        <v-data-table
-          id="data"
-          :loading="load"
-          loading-text="กำลังโหลดข้อมูล..."
-          :headers="headers"
-          :items="data"
-          :items-per-page="5"
-          class="elevation-1"
-        >
-          <template v-slot:[`item.log`]="{ item }">
-            <v-chip :color="getColor(item.log)">
-              {{ item.log }}
-            </v-chip>
-          </template>
-        </v-data-table>
-      </v-col>
-      <v-col></v-col>
-    </v-row> -->
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
 export default {
-  created() {
-    this.$nuxt.$on("delete", (even) => this.pulldata(even));
-  },
   async fetch() {
-    this.websocket.onmessage = (d) => this.onMessage(d);
-console.log('this.websocket ',this.websocket);
-    let o = { id: 2, status: "on" };
-    this.arr[o.id-1] = o
-    console.log(this.arr);
-      
-        // setInterval(async () => {
-        //   this.data = await this.$axios.$get(
-        //   "https://sontaya.000webhostapp.com/getlog.php"
-        // );
-        // console.log("context");
-        // }, 10000);
-        // let k = Object.keys(this.data)
-    // if (this.data.length == 0) this.delbut = false;
-    // this.$nuxt.$emit("datalen", this.delbut);
-    this.load = false;
+    // this.websocket.onmessage = (d) => this.onMessage(d);   
   },
-  mounted() {},
   asyncData(context) {
-    console.log("context", context);
     return {
       context,
     };
@@ -100,9 +41,7 @@ console.log('this.websocket ',this.websocket);
       arr: new Array(32),
       revc: "",
       t: "",
-      websocket: new WebSocket(
-        "wss://free.blr2.piesocket.com/v3/1?api_key=DzDDGthR65AMeJg4dLv2xhzLrDRGljQew7CuuQ2J&notify_self=1"
-      ),
+      // websocket: new WebSocket("ws://localhost:3002"),
       delbut: true,
       e1: 1,
       data: [],
@@ -121,38 +60,38 @@ console.log('this.websocket ',this.websocket);
   },
   methods: {
     onMessage(evt) {
+      console.log('sdfsf ',evt);
       let obj = {};
       obj = JSON.parse(evt.data);
+    console.log('sdfsf ',obj);
       var currentdate = new Date(); 
+
+  let datetext = currentdate.toTimeString();
+datetext = datetext.split(' ')[0];
       obj.lastupdate =" "+ currentdate.getDate() + "/"
                 + (currentdate.getMonth()+1)  + "/" 
-                + currentdate.getFullYear() + " เวลา"  
-                + currentdate.getHours().toLocaleString()+ ":"  
-                + currentdate.getMinutes().toLocaleString() + ":" 
-                + currentdate.getSeconds().toLocaleString();
-      console.log("obj ", obj);
+                + currentdate.getFullYear() + "\n"  
+                + datetext
       this.$set(this.arr, obj.id - 1, obj);
     },
     onerror(err){
-      this.websocket.onerror = this
-      console.log('onerror ',err);
-      this.websocket= new WebSocket(
-        "wss://free.blr2.piesocket.com/v3/1?api_key=DzDDGthR65AMeJg4dLv2xhzLrDRGljQew7CuuQ2J&notify_self=1"
-      )
+      // this.websocket.onerror = this
+  //     this.websocket= new WebSocket(
+  // 'ws://localhost:3001'
+  //     )
     },
     onclose(evt){
-      this.websocket.onclose = this
-      console.log('onclose ',evt.data);
-      this.websocket= new WebSocket(
-        "wss://free.blr2.piesocket.com/v3/1?api_key=DzDDGthR65AMeJg4dLv2xhzLrDRGljQew7CuuQ2J&notify_self=1"
-      )
+      // this.websocket.onclose = this
+      // this.websocket= new WebSocket(
+      //   'ws://localhost:3001'
+      // )
     },
     onOpen(evt) {
-      this.websocket.onopen = this;
-      this.sendMessage("Hello world");
+      // this.websocket.onopen = this;
+      // this.sendMessage("Hello world");
     },
     sendMessage(message) {
-      this.websocket.send(this.t);
+      // this.websocket.send(this.t);
     },
     // async pulldata(even) {
     //   console.log("event ", even);

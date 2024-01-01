@@ -4,6 +4,7 @@
       {{ pageNotFound }}
     </h1>
     <h1 v-else>
+      หกดกหด
       {{ otherError }}
     </h1>
     <NuxtLink to="/">

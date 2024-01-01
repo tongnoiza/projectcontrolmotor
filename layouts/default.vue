@@ -4,13 +4,13 @@
       <v-toolbar-title v-text="title" /> &nbsp; &nbsp; &nbsp;
       <v-btn
         elevation="20"
-        @click="exportTableToExcel()"
+        @click="exportExcel()"
         text
         color="primary"
       >
         <div style="color: azure">
           <span class="mdi mdi-45px mdi-content-save-plus-outline"></span>
-          ดาวน์โหลด
+          สร้าง Log
         </div>
       </v-btn>
       &nbsp; &nbsp; &nbsp;
@@ -83,8 +83,6 @@ export default {
  async created() {
     // this.$nuxt.$on("datalen", (even) => this.delbut(even));
   },
-
-
   data() {
     return {
       data:[],
@@ -122,42 +120,31 @@ export default {
       this.exportbutton = val;
     },
     async cleartable() {
-      this.loading = true;
-      await this.$axios
-        .$get("https://sontaya.000webhostapp.com/del.php")
-        .then((res) => {
-          console.log(res)
-          if (res == 1) {
-            this.$nuxt.$emit("delete", "delete successfully");
-          }
-        });
-      this.loading = false;
-      this.dialog = false;
+   
     },
 
-   async exportTableToExcel() {
-      let sourc = []
-      sourc = await this.$axios.$get(
-          "https://sontaya.000webhostapp.com/getlog.php"
+   async exportExcel() {
+    let  sourc = []
+        sourc = await this.$axios.$get(
+          "https://motorserver.onrender.com/log/report"
         );
-console.log('sourc ', sourc );
-      //  let data = []
-      //  data =  sourc.forEach(x=> {
-      //   delete x["0"]
-      //   delete x["1"]
-      //   })
-  
-  let binaryWS = XLSX.utils.json_to_sheet(sourc); 
-  
+    
+        if(sourc.length>0){
+            let binaryWS = XLSX.utils.json_to_sheet(sourc); 
+  var Heading = [
+  ["ID Slave","Status" ,"Date/time"],
+];
   // Create a new Workbook
   var wb = XLSX.utils.book_new() 
-
+binaryWS['!cols'] = [{width:12},{width:12},{width:20}];
   // Name your sheet
   XLSX.utils.book_append_sheet(wb, binaryWS, 'History Log') 
-
+  XLSX.utils.sheet_add_aoa(binaryWS, Heading);
   // export your excel
-  XLSX.writeFile(wb, 'HistoryLog.xlsx');
-
+ 
+  // XLSX.utils.sheet_add_json(wb,binaryWS ); 
+  XLSX.writeFile(wb, 'HistoryLog.xlsx')
+        }
 
     },
   },
