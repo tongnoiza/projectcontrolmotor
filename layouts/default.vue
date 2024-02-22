@@ -43,7 +43,7 @@
                 color="error"
                 :loading="loading"
                 text
-                @click="cleartable()"
+                @click="cleartable();dialog = false"
               >
                 <span class="mdi mdi-check-bold"></span>
                 ยืนยัน
@@ -54,6 +54,7 @@
       </v-row>
       <v-spacer />
     </v-app-bar>
+    
     <v-main>
       <v-container><Nuxt /></v-container>
     </v-main>
@@ -66,6 +67,7 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
 import * as XLSX from 'xlsx';
 export default {
   head:{
@@ -119,8 +121,10 @@ export default {
       this.delbutton = val;
       this.exportbutton = val;
     },
-    async cleartable() {
-   
+   async cleartable() {
+      await this.$axios.$get(
+          "https://motorserver.onrender.com/log/cleardb"
+        );
     },
 
    async exportExcel() {
@@ -144,6 +148,13 @@ binaryWS['!cols'] = [{width:12},{width:12},{width:20}];
  
   // XLSX.utils.sheet_add_json(wb,binaryWS ); 
   XLSX.writeFile(wb, 'HistoryLog.xlsx')
+        }else{
+          Swal.fire({
+  title: '',
+  text: 'ไม่มีข้อมูล',
+  icon: 'error',
+  confirmButtonText: 'OK'
+})
         }
 
     },

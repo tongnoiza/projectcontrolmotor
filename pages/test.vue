@@ -1,26 +1,24 @@
 <template>
-<div>
-    fdxgfx
-</div>
-
-
+    <div>
+        <v-text-field v-model="arr.form" label="Label"></v-text-field>
+        <v-text-field v-model="arr.form1" @keypress="kp"  label="Label"></v-text-field>
+        {{ arr }}
+    </div>
 </template>
 <script setup>
 import { ref, watch } from 'vue'
-let arr = ref([])
-let text = 
-console.log('arr ',arr );
-// for (let i = 0; i < 10; i++) {
-//     arr.push('tag'+i)
-// }
+let arr = ref({})
+let text = ''
+
+
 const kp = v => {
-    console.log('vv ',v);
+    if(!v.key.match(/^[0-9]-?/g)){
+        v.preventDefault()
+    } else{
+        let r = /[\d]{3}\,/g.match(arr.value.form1)
+        console.log('gh ',r);
+    }
+    
 }
-// function f(val){
-//     let ans = []
-//   arr = arr.filter(v=> { return v.includes(val)})
-//     console.log(ans);
-//     console.log(val);
-// }
 
 </script>
