@@ -28,41 +28,26 @@ export default {
   async fetch() {
     this.websocket.onmessage = msg => this.onMessage(msg)
   },
-  asyncData(context) {
-    return {
-      context,
-    };
-  },
-
   data() {
     return {
       arr: new Array(10),
-      revc: "",
       host:'wss://s11773.blr1.piesocket.com',
-      path:'/v3/1?api_key=Gs9IpefvF6jymandpzVzm5m6KdDx4A2PLQ6nrLbU',
-      websocket: new WebSocket(host+path),
+      path:'/v3/1?api_key=CylbLj2jyf5bpOLRpXZM1ruSOdvxGEXHPNDYiJdW&notify_self=1',
+      websocket: new WebSocket("wss://free.blr2.piesocket.com/v3/1?api_key=CylbLj2jyf5bpOLRpXZM1ruSOdvxGEXHPNDYiJdW&notify_self=1"),
       // websocket: new WebSocket('wss://motorsocket.onrender.com'),
-      delbut: true,
-      e1: 1,
-      data: [],
-      load: true,
       headers: [
         { text: "เครื่องที่/สถานะ", value: "log" },
         { text: "วัน/เวลา", value: "Datetime" },
       ],
     };
   },
-  computed: {},
   inject: {
     theme: {
       default: { isDark: false },
     },
   },
   methods: {
-
     onMessage(evt) {
-   
-      console.log(evt.data);
       let obj = {};
       obj = JSON.parse(evt.data);
       var currentdate = new Date();
@@ -75,38 +60,6 @@ export default {
 
       this.$set(this.arr, obj.id - 1, obj);
     },
-
-    onerror(err) {
-      // this.websocket.onerror = this
-      //     this.websocket= new WebSocket(
-      // 'ws://localhost:3001'
-      //     )
-    },
-    onclose(evt) {
-      // this.websocket.onclose = this
-      // this.websocket= new WebSocket(
-      //   'ws://localhost:3001'
-      // )
-    },
-    onOpen(evt) {
-      // this.websocket.onopen = this;
-      // this.sendMessage("Hello world");
-    },
-    sendMessage(message) {
-      // this.websocket.send(this.t);
-    },
-    // async pulldata(even) {
-    //   console.log("event ", even);
-    //   this.data = await this.$axios.$get(
-    //     "https://sontaya.000webhostapp.com/getlog.php"
-    //   );
-    //   this.data.reverse();
-    // },
-    // getColor(status) {
-    //   if (status.includes("ขัดข้อง")) return "red";
-    //   else if (status.includes("เปิด")) return "green";
-    //   else if (status.includes("ปิด")) return "black";
-    // },
   },
 };
 </script>
