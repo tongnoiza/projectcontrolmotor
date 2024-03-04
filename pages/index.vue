@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row style="margin-top: 50px;margin-bottom: 100px;">
-      <v-card v-for="(i, n) in arr" style="margin:15px;width:150px;hight:150px" :title="`Slave ${+n + 1}`"> <v-row>
+      <v-card v-for="(i, n) in arr" :key="n" style="margin:15px;width:150px;hight:150px" :title="`Slave ${+n + 1}`"> <v-row>
           <v-col offset="1"> <v-chip class="ma-2" style="top: 6px;background-color: rgba(33,150,243,0.2) !important;"
               color="primary" variant="text">Slave {{ +n + 1 }}</v-chip></v-col>
         </v-row>
@@ -31,10 +31,7 @@ export default {
   data() {
     return {
       arr: new Array(10),
-      host:'wss://s11773.blr1.piesocket.com',
-      path:'/v3/1?api_key=CylbLj2jyf5bpOLRpXZM1ruSOdvxGEXHPNDYiJdW&notify_self=1',
       websocket: new WebSocket("wss://free.blr2.piesocket.com/v3/1?api_key=CylbLj2jyf5bpOLRpXZM1ruSOdvxGEXHPNDYiJdW&notify_self=1"),
-      // websocket: new WebSocket('wss://motorsocket.onrender.com'),
       headers: [
         { text: "เครื่องที่/สถานะ", value: "log" },
         { text: "วัน/เวลา", value: "Datetime" },
@@ -57,7 +54,6 @@ export default {
         + (currentdate.getMonth() + 1) + "/"
         + currentdate.getFullYear() + "\n"
         + datetext
-
       this.$set(this.arr, obj.id - 1, obj);
     },
   },
