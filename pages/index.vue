@@ -1,15 +1,33 @@
 <template>
   <div>
-    <v-row style="margin-top: 50px;margin-bottom: 100px;">
-      <v-card v-for="(i, n) in arr" :key="n" style="margin:15px;width:150px;hight:150px" :title="`Slave ${+n + 1}`"> <v-row>
-          <v-col offset="1"> <v-chip class="ma-2" style="top: 6px;background-color: rgba(33,150,243,0.2) !important;"
-              color="primary" variant="text">Slave {{ +n + 1 }}</v-chip></v-col>
+    <v-row style="margin-top: 50px; margin-bottom: 100px">
+      <v-card v-for="(i, n) in arr" :key="n" style="margin: 15px; width: 190px; hight: 150px"
+        :title="`Slave ${+n + 1}`">
+        <v-row>
+          <v-col>
+            <v-chip class="ma-2" style="
+                top: 6px;
+                background-color: rgba(33, 150, 243, 0.2) !important;
+              " color="primary" variant="outlined">Slave {{ +n + 1 }}
+
+            </v-chip>
+            <v-chip variant="outlined" style="top: 6px;" v-if="i?.connect == 1" color="green"> online </v-chip>
+            <v-chip variant="outlined" style="top: 6px;" v-else color="red"> offline </v-chip>
+
+          </v-col>
+          <!-- <v-col>
+      
+          </v-col> -->
         </v-row>
         <v-img src="nano.png"></v-img>
         <v-row style="margin-top: -33px">
           <v-col offset="1">
-            <v-sheet v-if="i?.lastupdate" class="pa-2 ma-2"> อัพเดตล่าสุด{{ i?.lastupdate }} </v-sheet>
-            <v-sheet v-if="i?.status == 'err'" class="pa-2 ma-2"> มีข้อผิดพลาด </v-sheet>
+            <v-sheet v-if="i?.lastupdate" class="pa-2 ma-2">
+              อัพเดตล่าสุด{{ i?.lastupdate }}
+            </v-sheet>
+            <v-sheet v-if="i?.status == 'err'" class="pa-2 ma-2">
+              มีข้อผิดพลาด
+            </v-sheet>
           </v-col>
         </v-row>
         <v-row>
@@ -26,12 +44,24 @@
 <script>
 export default {
   async fetch() {
-    this.websocket.onmessage = msg => this.onMessage(msg)
+    this.websocket.onmessage = (msg) => this.onMessage(msg);
+  },
+  created() {
+
+    for (let i = 0; i < 32; i++) {
+      this.arr[i] = {};
+    }
+    // let t = 'o1011011'
+
   },
   data() {
     return {
-      arr: new Array(10),
-      websocket: new WebSocket("wss://free.blr2.piesocket.com/v3/1?api_key=CylbLj2jyf5bpOLRpXZM1ruSOdvxGEXHPNDYiJdW&notify_self=1"),
+      update: {},
+      arr: [],
+      websocket: new WebSocket(
+        "wss://free.blr2.piesocket.com/v3/1?api_key=awvvitZQoivqUGWz1DW4ONGa9QXdiwGUDyil6ndJ&notify_self=1"
+        // "wss://motorsocket.onrender.com"
+      ),
       headers: [
         { text: "เครื่องที่/สถานะ", value: "log" },
         { text: "วัน/เวลา", value: "Datetime" },
@@ -44,24 +74,44 @@ export default {
     },
   },
   methods: {
-    onMessage(evt) {
-      let obj = {};
-      obj = JSON.parse(evt.data);
-      var currentdate = new Date();
-      let datetext = currentdate.toTimeString();
-      datetext = datetext.split(' ')[0];
-      obj.lastupdate = " " + currentdate.getDate() + "/"
-        + (currentdate.getMonth() + 1) + "/"
-        + currentdate.getFullYear() + "\n"
-        + datetext
-      this.$set(this.arr, obj.id - 1, obj);
+    async onMessage(evt) {
+      if (evt.data.charAt(0) == 'o') {
+        let t = evt.data.substring(1)
+        for (let i = 0; i < t.length; i++) {
+          let obj = {}
+          if (t.charAt(i) == 1)  obj.connect = t.charAt(i)
+          this.$set(this.arr, i, { ...JSON.stringify(this.arr[i]), ...obj });
+        }
+      } else {
+        let obj = {};
+        obj = JSON.parse(evt.data);
+        console.log(obj);
+        var currentdate = new Date();
+        let datetext = currentdate.toTimeString();
+        datetext = datetext.split(" ")[0];
+        obj.lastupdate =
+          " " +
+          currentdate.getDate() +
+          "/" +
+          (currentdate.getMonth() + 1) +
+          "/" +
+          currentdate.getFullYear() +
+          "\n" +
+          datetext;
+
+        let update = { ...JSON.parse(JSON.stringify(this.arr[obj.id - 1])), ...obj };
+        console.log("update  ", update);
+        this.$set(this.arr, obj.id - 1, update);
+      }
+
+
     },
   },
 };
 </script>
 <style>
 :root {
-  --size: 15px
+  --size: 15px;
 }
 
 .inner {
@@ -100,7 +150,7 @@ export default {
   box-shadow: 1px 0px 38px 5px #00ff00, inset 0 0 8px #00ff00;
 }
 
-.red {
+/* .red {
   position: relative;
   left: 43%;
   top: -29px;
@@ -110,7 +160,7 @@ export default {
   height: var(--size);
   border-radius: var(--size);
   box-shadow: 1px 0px 38px 5px #f62a2a, inset 0 0 8px #f70d67;
-}
+} */
 
 .inner p {
   display: block;
