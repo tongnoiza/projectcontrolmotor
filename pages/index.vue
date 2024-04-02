@@ -44,7 +44,10 @@
 <script>
 export default {
   async fetch() {
-    this.websocket.onmessage = (msg) => this.onMessage(msg);
+    setInterval(()=>{
+       this.websocket.onmessage = (msg) => this.onMessage(msg);
+    },10000)
+   
   },
   created() {
 
