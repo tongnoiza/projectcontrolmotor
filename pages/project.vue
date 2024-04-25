@@ -1,14 +1,15 @@
 <template>
-  <div>
+ <div>
     <v-row style="margin-top: 50px; margin-bottom: 100px">
-
-      <v-card v-for="(i, n) in arr" :key="n" style="margin: 15px; width: 190px;" :title="`Slave ${+n + 1}`">
+      <v-card v-for="(i, n) in arr" :key="n" style="margin: 15px; width: 190px; height: 150px"
+        :title="`Slave ${+n + 1}`">
         <v-row>
           <v-col>
             <v-chip class="ma-2" style="
                 top: 6px;
                 background-color: rgba(33, 150, 243, 0.2) !important;
               " color="primary" variant="outlined">Slave {{ +n + 1 }}
+
             </v-chip>
             <v-chip variant="outlined" style="top: 6px;" v-if="i?.connect == 1" color="green"> online </v-chip>
             <v-chip variant="outlined" style="top: 6px;" v-else color="red"> offline </v-chip>
@@ -29,95 +30,66 @@
         <v-row>
           <v-col>
             <div v-if="i?.status == 'on'" class="green-light"></div>
-            <div v-else-if="i?.status == 'off' || i?.status == 'err'" class="red-error pa-2 ma-2"></div>
+            <div v-else-if="i?.status == 'off' || i?.status == 'err'" class="red-error"></div>
             <!-- <div> มีข้อผิดพลาด</div> -->
           </v-col>
         </v-row>
       </v-card>
     </v-row>
   </div>
+
+
 </template>
-<script>
-// import { useWebSocket } from '@vueuse/core'
+<script setup lang="ts">
 
-export default {
-  created() {
-    this.websocket.onmessage = (msg) => this.onMessage(msg);
-    this.websocket.onerror = v => {
-      console.log('err ', v);
-    }
-    this.websocket.onclose = v => {
-      console.log('onclose ', v);
-    }
-    // console.log('this.websocket. ', this.websocket);
+import { ref } from 'vue'
+let update = {}
+let arr = ref([])
+for (let i = 0; i < 32; i++) {
+    arr[i] = {};
+}
+let ws = new WebSocket("wss://free.blr2.piesocket.com/v3/1?api_key=awvvitZQoivqUGWz1DW4ONGa9QXdiwGUDyil6ndJ&notify_self=1")
+ws.onmessage = evt => {
+    try {
+        if (evt.data.charAt(0) != 'o') {
+            let obj = {};
+            obj = JSON.parse(evt.data);
+            console.log(obj);
+            var currentdate = new Date();
+            let datetext = currentdate.toTimeString();
+            datetext = datetext.split(" ")[0];
+            obj.lastupdate =
+                " " +
+                currentdate.getDate() +
+                "/" +
+                (currentdate.getMonth() + 1) +
+                "/" +
+                currentdate.getFullYear() +
+                "\n" +
+                datetext;
 
-    for (let i = 0; i < 32; i++) {
-      this.arr[i] = {};
-    }
-    // console.log('local data create ',JSON.parse(localStorage.getItem('data')) );
-// if(localStorage.getItem('data')){
-//   JSON.parse(localStorage.getItem('data')).forEach((v,i) => {
-//     console.log('for ',v);
-//     this.$set(this.arr, i,  v );
-//   });
-// }
-  },
-  data() {
-    return {
-      update: {},
-      arr: [],
-      websocket: new WebSocket('wss://motorsocket.onrender.com'),
-      headers: [
-        { text: "เครื่องที่/สถานะ", value: "log" },
-        { text: "วัน/เวลา", value: "Datetime" },
-      ],
-    };
-  },
-  inject: {
-    theme: {
-      default: { isDark: false },
-    },
-  },
-  methods: {
-    async onMessage(evt) {
-   
-    if (evt.data.charAt(0) != 'o') {
-        let obj = {};
-        obj = JSON.parse(evt.data);
-        console.log(obj);
-        var currentdate = new Date();
-        let datetext = currentdate.toTimeString();
-        datetext = datetext.split(" ")[0];
-        obj.lastupdate =
-          " " +
-          currentdate.getDate() +
-          "/" +
-          (currentdate.getMonth() + 1) +
-          "/" +
-          currentdate.getFullYear() +
-          "\n" +
-          datetext;
+            let update = { ...JSON.parse(JSON.stringify(arr[obj.id - 1])), ...obj };
+            console.log("update  ", update);
+            this.$set(arr, obj.id - 1, update);
+        } else {
+            // this.arr = []
+            let t = evt.data.substring(1)
+            for (let i = 0; i < t.length; i++) {
+                let obj = {}
+                if (t.charAt(i) == 1) obj.connect = t.charAt(i)
+                // this.$set(this.arr, i, {...this.arr[i], ...obj });
 
-        let update = { ...JSON.parse(JSON.stringify(this.arr[obj.id - 1])), ...obj };
-        console.log("update  ", update);
-        this.$set(this.arr, obj.id - 1, update);
-      } else {
-        let t = evt.data.substring(1)
-        console.log(t);
-        for (let i = 0; i < t.length; i++) {
-          let obj = {connect:t.charAt(i)}
-    // console.log({obj});
-       await this.$set(this.arr, i, { ...JSON.parse(JSON.stringify(this.arr[i])), ...obj });
+                this.$set(arr, i, { ...JSON.parse(JSON.stringify(arr[i])), ...obj });
+            }
+            console.log(arr)
         }
-        // localStorage.setItem('data',JSON.stringify(this.arr))
-        // console.log(this.arr)
-      }
-     await this.$nextTick()
-    },
-  },
-};
+    } catch (Ex) {
+        // this.websocket.close()
+    }
+}
+
 </script>
-<style>
+<style >
 :root {
   --size: 15px;
 }
