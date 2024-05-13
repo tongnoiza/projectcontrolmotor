@@ -42,13 +42,7 @@
 
 export default {
   created() {
-    this.websocket.onmessage = (msg) => this.onMessage(msg);
-    this.websocket.onerror = v => {
-      console.log('err ', v);
-    }
-    this.websocket.onclose = v => {
-      console.log('onclose ', v);
-    }
+
     // console.log('this.websocket. ', this.websocket);
 
     for (let i = 0; i < 32; i++) {
@@ -61,6 +55,15 @@ export default {
 //     this.$set(this.arr, i,  v );
 //   });
 // }
+  },
+  mounted(){
+    this.websocket.onmessage =  this.onMessage;   
+    this.websocket.onerror = v => {
+      console.log('err ', v);
+    }
+    this.websocket.onclose = v => {
+      console.log('onclose ', v);
+    }
   },
   data() {
     return {
@@ -78,12 +81,20 @@ export default {
       default: { isDark: false },
     },
   },
+  updated(){
+    // this.onMessage()
+  },
   methods: {
     async onMessage(evt) {
-   
-    if (evt.data.charAt(0) != 'o') {
+      const rep = evt.data.replace('0','')
+      console.log(rep);
+
+ 
+      this.$forceUpdate()
+     await this.$nextTick(async ()=>{
+      if (evt.data.charAt(0) != 'o') {
         let obj = {};
-        obj = JSON.parse(evt.data);
+        obj = JSON.parse(rep);
         console.log(obj);
         var currentdate = new Date();
         let datetext = currentdate.toTimeString();
@@ -112,7 +123,7 @@ export default {
         // localStorage.setItem('data',JSON.stringify(this.arr))
         // console.log(this.arr)
       }
-     await this.$nextTick()
+     })
     },
   },
 };
