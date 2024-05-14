@@ -1,8 +1,7 @@
 <template>
   <div>
-    <v-row style="margin-top: 50px; margin-bottom: 100px">
-
-      <v-card v-for="(i, n) in arr" :key="n" style="margin: 15px; width: 160px;" :title="`Slave ${+n + 1}`">
+    <v-row style="margin-top: 30px; margin-bottom: 100px">
+      <v-card v-for="(i, n) in arr" :key="n" style="margin: 5px; width: 160px;" :title="`Slave ${+n + 1}`">
         <v-row>
           <v-col>
             <v-chip class="ma-2" style="

@@ -2,12 +2,7 @@
   <v-app :light="true">
     <v-app-bar :clipped-left="clipped" fixed app>
       <v-toolbar-title v-text="title" /> &nbsp; &nbsp; &nbsp;
-      <v-btn
-        elevation="20"
-        @click="exportExcel()"
-        text
-        color="primary"
-      >
+      <v-btn elevation="20" @click="exportExcel()" text color="primary">
         <div style="color: azure">
           <span class="mdi mdi-45px mdi-content-save-plus-outline"></span>
           สร้าง Log
@@ -43,7 +38,10 @@
                 color="error"
                 :loading="loading"
                 text
-                @click="cleartable();dialog = false"
+                @click="
+                  cleartable();
+                  dialog = false;
+                "
               >
                 <span class="mdi mdi-check-bold"></span>
                 ยืนยัน
@@ -54,7 +52,7 @@
       </v-row>
       <v-spacer />
     </v-app-bar>
-    
+
     <v-main>
       <v-container><Nuxt /></v-container>
     </v-main>
@@ -67,28 +65,28 @@
 </template>
 
 <script>
-import Swal from 'sweetalert2'
-import * as XLSX from 'xlsx';
+import Swal from "sweetalert2";
+import * as XLSX from "xlsx";
 export default {
-  head:{
-    title:'โปรเจคจบ',
+  head: {
+    title: "โปรเจคจบ",
     meta: [
       {
-        hid: 'description',
-        name: 'description',
-        content: 'Home page description'
-      }
+        hid: "description",
+        name: "description",
+        content: "Home page description",
+      },
     ],
   },
   // components: { PopupVue },
   name: "DefaultLayout",
- async created() {
+  async created() {
     // this.$nuxt.$on("datalen", (even) => this.delbut(even));
   },
   data() {
     return {
-      data:[],
-      dataarray:[],
+      data: [],
+      dataarray: [],
       exportbutton: false,
       delbutton: false,
       del: true,
@@ -121,42 +119,35 @@ export default {
       this.delbutton = val;
       this.exportbutton = val;
     },
-   async cleartable() {
-      await this.$axios.$get(
-          "https://motorserver.onrender.com/log/cleardb"
-        );
+    async cleartable() {
+      await this.$axios.$get("/cleardb");
     },
 
-   async exportExcel() {
-    let  sourc = []
-        sourc = await this.$axios.$get(
-          "https://motorserver.onrender.com/log/report"
-        );
-    
-        if(sourc.length>0){
-            let binaryWS = XLSX.utils.json_to_sheet(sourc); 
-  var Heading = [
-  ["ID Slave","Status" ,"Date/time"],
-];
-  // Create a new Workbook
-  var wb = XLSX.utils.book_new() 
-binaryWS['!cols'] = [{width:12},{width:12},{width:20}];
-  // Name your sheet
-  XLSX.utils.book_append_sheet(wb, binaryWS, 'History Log') 
-  XLSX.utils.sheet_add_aoa(binaryWS, Heading);
-  // export your excel
- 
-  // XLSX.utils.sheet_add_json(wb,binaryWS ); 
-  XLSX.writeFile(wb, 'HistoryLog.xlsx')
-        }else{
-          Swal.fire({
-  title: '',
-  text: 'ไม่มีข้อมูล',
-  icon: 'error',
-  confirmButtonText: 'OK'
-})
-        }
+    async exportExcel() {
+      let sourc = [];
+      sourc = await this.$axios.$get("/report");
 
+      if (sourc.length > 0) {
+        let binaryWS = XLSX.utils.json_to_sheet(sourc);
+        var Heading = [["ID Slave", "Status", "Date/time"]];
+        // Create a new Workbook
+        var wb = XLSX.utils.book_new();
+        binaryWS["!cols"] = [{ width: 12 }, { width: 12 }, { width: 20 }];
+        // Name your sheet
+        XLSX.utils.book_append_sheet(wb, binaryWS, "History Log");
+        XLSX.utils.sheet_add_aoa(binaryWS, Heading);
+        // export your excel
+
+        // XLSX.utils.sheet_add_json(wb,binaryWS );
+        XLSX.writeFile(wb, "HistoryLog.xlsx");
+      } else {
+        Swal.fire({
+          title: "",
+          text: "ไม่มีข้อมูล",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+      }
     },
   },
 };
